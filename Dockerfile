@@ -9,13 +9,13 @@ COPY .mvn .mvn
 COPY src src
 
 # compile the Java application
-RUN mvn clean package -Dmaven.skip.test=true
+RUN mvn package -Dmaven.skip.test=true
 
 FROM maven:3-eclipse-temurin-21
 WORKDIR /app
 
 # Copy and rename to app.jar
-COPY --from=builder /src/target/skyward-java-1-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /src/target/springbayjava-0.0.1-SNAPSHOT.jar app.jar
 
 ENV PORT=8080
 ENV SPRING_REDIS_HOST=localhost SPRING_REDIS_PORT=1234

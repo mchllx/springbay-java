@@ -36,7 +36,9 @@ public class AppConfig {
     @Bean(Utils.BEAN_REDIS)
     public RedisTemplate<String, String> redisTemplateFactory() {
 
-        final RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(redisHost, redisPort);
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
+        config.setHostName(redisHost);
+        config.setPort(redisPort);
         config.setDatabase(redisDatabase);
 
         if (!redisUser.isEmpty()) {
@@ -48,12 +50,12 @@ public class AppConfig {
        
         logger.log(Level.INFO, "Redis database: %d".formatted(redisPort));
 
-        final JedisClientConfiguration jedisClient = JedisClientConfiguration
+        JedisClientConfiguration jedisClient = JedisClientConfiguration
             .builder().build();
 
         //if indirectly references, inject jedis dependency
-        final JedisConnectionFactory jedisFac = new JedisConnectionFactory(config, jedisClient);
-            jedisFac.afterPropertiesSet();
+        JedisConnectionFactory jedisFac = new JedisConnectionFactory(config, jedisClient);
+        jedisFac.afterPropertiesSet();
 
         RedisTemplate<String, String> template = new RedisTemplate<>();
         template.setConnectionFactory(jedisFac);

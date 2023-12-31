@@ -218,6 +218,16 @@ a{
     font-family: 'Poppins', san-serif;
     color: rgb(105, 105, 105);
   }
+ 
+  .search input[type="search"]:hover,
+  .search input[type="search"]:focus {
+    background: transparent;
+    width: 100%;
+    font-size: 12px;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+  }
 
   .search-btn {
     background: transparent;
@@ -235,7 +245,7 @@ a{
 
   .icon-container img {
     max-width: 2rem;
-    margin-left: 0.5rem;
+    margin-left: 0.75rem;
   }
 
   main {
@@ -345,7 +355,7 @@ a{
     flex-basis: 100px;
   }
 
-  main .flash-sales  p {
+  main .flash-sales-timer p {
     font-family: 'Poppins', sans-serif;
     color: rgb(53, 53, 53);
     font-weight: 500;
@@ -354,6 +364,17 @@ a{
     letter-spacing: -.003em;
     font-size: 0.75rem;
     margin-bottom: -0.25rem;
+  }
+
+  main .flash-sales-timer h2 {
+    font-family: 'Inter', sans-serif;
+    color: rgb(53, 53, 53);
+    font-weight: 700;
+    font-style: bold;
+    line-height: 1.58;
+    letter-spacing: -.003em;
+    font-size: 1.55rem;
+    margin-top: 0.5rem;
   }
 
   main .product-list{
