@@ -2,7 +2,7 @@ package sg.edu.nus.iss.springbay;
 
 public class Utils {
 
-    public static final String BEAN_REDIS = "prodCache";
+    public static final String BEAN_REDIS = "redis";
 
     public static final Integer F_ID = 0;
     public static final Integer F_TITLE = 1;
