@@ -33,7 +33,7 @@ public class AppConfig {
     @Value("${spring.redis.password}")
     private String redisPassword;
 
-    @Bean("prodCache")
+    @Bean(Utils.BEAN_REDIS)
     public RedisTemplate<String, String> redisTemplateFactory() {
 
         final RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(redisHost, redisPort);

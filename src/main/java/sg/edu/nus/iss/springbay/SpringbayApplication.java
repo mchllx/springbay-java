@@ -3,6 +3,7 @@ package sg.edu.nus.iss.springbay;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,12 @@ public class SpringbayApplication implements CommandLineRunner {
 		// 	System.out.println("\t" + product);
 		prodSvc.saveProducts(prodList);
 
-		System.out.println("--------------------Loaded from Cache:--------------------" + prodList);
+		List<String> catList = prodSvc.getAllCategory("category");
+		logger.info("Saving categories into redis");
+		prodSvc.saveCategories(catList);
+
+		System.out.println("--------------------Loaded from Cache: Products--------------------" + prodList);
+		System.out.println("--------------------Loaded from Cache: Category:--------------------" + catList);
 	}
+		
 }

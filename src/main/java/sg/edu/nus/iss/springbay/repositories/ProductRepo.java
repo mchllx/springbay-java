@@ -7,19 +7,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
+
+import sg.edu.nus.iss.springbay.Utils;
 import sg.edu.nus.iss.springbay.models.Product;
 
 @Repository
 public class ProductRepo {
 
-    @Autowired @Qualifier("prodCache")
+    @Autowired @Qualifier(Utils.BEAN_REDIS)
     private RedisTemplate<String, String> template;
 
         private Logger logger = Logger.getLogger(ProductRepo.class.getName());
 
     public void saveProducts(List<Product> prodList) {
         if (prodList.isEmpty()) {
-            logger.info("Saving failed: Product is empty"); 
+            logger.info("Saving failed: No product found"); 
         } else {
             prodList.stream()
                 .forEach(product -> {
@@ -33,26 +35,35 @@ public class ProductRepo {
                 });
         }
     }
+
+    public void saveCategory(List<String> catList) {
+        if (catList.isEmpty()) {
+            logger.info("Saving failed: No categories found"); 
+        } else {
+            template.opsForList().leftPushAll("category", catList);
+                        //String
+        }
+    }
         
-    public Long getNumberOfProducts(String key) {
+    public Long getTotal(String key) {
         return template.opsForList().size(key);
     }
 
-    public List<String> getAllProduct(String key) {
+    public List<String> getAll(String key) {
         return template.opsForList().range(key, 0, -1);
     }
 
-    public String getProduct(String key, int index) {
+    public String get(String key, int index) {
         return template.opsForList().index(key, index);
-       }
+    }
 
-    public void deleteProducts(String key) {
-        if (hasProducts(key) > 1) {
+    public void delete(String key) {
+        if (exists(key) > 1) {
         template.delete(key);
         }
     }
 
-    public Long hasProducts(String key) {
+    public Long exists(String key) {
         return template.opsForList().size(key);
     }
 

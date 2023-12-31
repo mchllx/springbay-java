@@ -42,6 +42,10 @@ public class Product {
 
     public Product() {
     }
+    
+    public Product(String category) {
+        this.category = category;
+    }
      
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id;}

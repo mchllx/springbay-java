@@ -1,6 +1,7 @@
 package sg.edu.nus.iss.springbay.controllers;
 
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,14 @@ public class HomeController {
         ModelAndView mav = new ModelAndView();
 
         List<Product> prodList = prodSvc.getAllProduct("products");
+        List<String> catList = prodSvc.getAllCategory("category");
+        List<String> menuList = prodSvc.getMenu();
+        System.out.println("---------Controller Category---------" + catList);
+        
         logger.info("Success: Products found" + prodList);
         mav.addObject("product", prodList);
+        mav.addObject("category", catList);
+        mav.addObject("menu", menuList);
 
         //if model does not contain object
         if (mav.equals(null)) {

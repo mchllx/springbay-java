@@ -9,64 +9,160 @@
     </style>
 </head>
 <body>
+    <header>
         <nav class="navbar">
-            <div class="logo">
-                <a href="/">Logo</a>
-            </div>
-            <div class="hamburger-menu">
-                <span class="line"></span>
-                <span class="line"></span>
-                <span class="line"></span>
-            </div>
-            <div class="nav-menu hide">
-                <a href="#">Home</a>
-                <a href="#">Contact</a>
-                <a href="#">About</a>
-                <a href="#">Sign Up</a>
+            <div class="logo-container">
+            <a href="/"><img src="../icons/spring-logo.svg" alt="logo"></a>
             </div>
             <div class="search">
                 <form action="#">
-            <input type="search" placeholder="What are you looking for?" name="search">
-            <input type="submit" name="search" class="search" value="Search">
+                <input type="search" placeholder="Enter product name" name="search">
+                <button type="submit" class="search-btn" value="Search"><img src="../icons/search.svg" alt="search"></button>
                 </form>
             </div>
+
+            <div class="icon-container">
+            <a th:href="cart"><img src="../icons/cart.svg" alt="cart" ></a>
+            <a th:href="@{'/cat=' + ${menu}}"><img src="../icons/user.svg" alt="user" ></a>
+            </div>
         </nav>
+    </header>
 
-    <div>
-    <h1>Springbay</h1>
-
-    <h2>Welcome, Name</h2>
+    <main class="grid">
+    <!-- <div class="welcome">
+        <h2>Welcome, Name</h2>
+    </div> -->
     <!-- *{user.userName} -->
+
+    <div class="category-list">
+        <tr th:each="menu, iterStat : ${menu}" th:if="${iterStat.index lt 9}">
+            <td><a th:href="@{'/cat=' + ${menu}}" th:text="${menu}"></a></td>
+        </tr>
+    </div>
 
     <!-- Slideshow container -->
     <div class="slideshow-container fade">
-
-        <!-- Full images / Content -->
         <div class="slideshow-wrapper">
-        <div class="Containers">
-        <img class="cropped-img" src="https://images.unsplash.com/photo-1486401899868-0e435ed85128?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="width:100%">
+        <div class="Containers" style="display: block;">
+        <img class="cropped-img" src="https://images.unsplash.com/photo-1551816230-ef5deaed4a26?q=80&w=2585&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="product2">
         </div>
     
-        <div class="Containers">
-        <img class="cropped-img" src="https://images.unsplash.com/photo-1567721913486-6585f069b332?q=80&w=2788&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="width:100%">
+        <div class="Containers" style="display: none;">
+        <img class="cropped-img" src="https://images.unsplash.com/photo-1567721913486-6585f069b332?q=80&w=2788&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="product2">
         </div>
     
-        <div class="Containers">
-        <img class="cropped-img" src="https://images.unsplash.com/photo-1556781932-381b3225022f?q=80&w=2835&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="width:100%">
+        <div class="Containers" style="display: none;">
+        <img class="cropped-img" src="https://images.unsplash.com/photo-1556781932-381b3225022f?q=80&w=2835&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="product3">
         </div>
-        
+
+        <!-- The dots -->
+        <div class="dots-container" style="text-align:center">
+            <span class="dots" onclick="currentSlide(1)"></span>
+            <span class="dots" onclick="currentSlide(2)"></span>
+            <span class="dots" onclick="currentSlide(3)"></span>
+        </div>
+
         </div>
     </div>
-    <br>
     
-    <!-- The dots -->
-    <div style="text-align:center">
-        <span class="dots" onclick="currentSlide(1)"></span>
-        <span class="dots" onclick="currentSlide(2)"></span>
-        <span class="dots" onclick="currentSlide(3)"></span>
-    </div> 
+    <div class="subheading">
+        <h4>Today's</h4>
+    </div>
+    <div class="section-header">
+        <h2>Flash Sales</h2>
+    </div>
+    <div class="flash-sales-timer"> 
+        <div>
+            <p><span>Days</span></p>
+            <h2 id="days">00</h2>
+        </div>
+        <div>
+            <p><span>Hours</span></p>
+            <h2 id="hours">00</h2>
+        </div>
+        <div>
+            <p><span>Minutes</span></p>
+            <h2 id="minutes">00</h2>
+        </div>
+        <div>
+            <p><span>Seconds</span></p>
+            <h2 id="seconds">00</h2>
+        </div>
+    </div>
+    <div class="section-button">
+        left right
+    </div>
+    <div class="product-list">
+        <tr th:each="product, iterStat : ${product}" th:if="${iterStat.index lt 4}">
+            <td><a th:href="@{'/product=' + *{product.title}}">
+            <img class="cropped-img" th:src="${#strings.listSplit(#strings.replace(#strings.replace(product.images, '[', ''), ']', ''), ',')[0]}"
+                th:text="*{product.title}"></a></td>
+        </tr>
+    </div>
+    <div class="button-container">
+    <form action="products">
+        <button>View All Products</button>
+    </form>
+    </div>
 
-    <div class="container">
+    <div class="subheading">
+        <h4>Categories</h4>
+    </div>
+    <div class="section-header">
+        <h2>Browse by Categories</h2>
+    </div>
+    <div class="categories">
+        <a th:href="@{'/cat=' + ${menu}}"><img src="../blocks/phone.svg" alt="phone" ></a>
+        <a th:href="@{'/cat=' + ${menu}}"><img src="../blocks/computer.svg" alt="computer" ></a>
+        <a th:href="@{'/cat=' + ${menu}}"><img src="../blocks/smartwatch.svg" alt="smartwatch" ></a>
+        <a th:href="@{'/cat=' + ${menu}}"><img src="../blocks/camera.svg" alt="camera" ></a>
+        <a th:href="@{'/cat=' + ${menu}}"><img src="../blocks/headphones.svg" alt="headphones" ></a>
+        <a th:href="@{'/cat=' + ${menu}}"><img src="../blocks/gaming.svg" alt="gaming" ></a>
+    </div>
+
+    <div class="subheading">
+        <h4>All-Time</h4>
+    </div>
+    <div class="section-header">
+        <h2>Best Selling Products</h2>
+    </div>
+    <div class="section-button">
+        <form action="products">
+            <button>View All</button>
+        </form>
+        <!-- ratings sort by highest -->
+    </div>
+
+    <div class="product-list">
+        <tr th:each="product, iterStat : ${product}" th:if="${iterStat.index lt 4}">
+            <td><a th:href="@{'/product=' + *{product.title}}">
+            <img class="cropped-img" th:src="${#strings.listSplit(#strings.replace(#strings.replace(product.images, '[', ''), ']', ''), ',')[0]}"
+                th:text="*{product.title}"></a></td>
+        </tr>
+    </div>
+
+    <div class="subheading">
+        <h4>Our Products</h4>
+    </div>
+    <div class="section-header">
+        <h2>Explore Our Products</h2>
+    </div>     
+     
+    <div class="product-list">
+        <tr th:each="product, iterStat : ${product}" th:if="${iterStat.index lt 8}">
+            <td><a th:href="@{'/product=' + *{product.title}}">
+            <img class="cropped-img" th:src="${#strings.listSplit(#strings.replace(#strings.replace(product.images, '[', ''), ']', ''), ',')[0]}"
+                th:text="*{product.title}"></a></td>
+        </tr>
+    </div>
+
+    <div class="button-container">
+        <form action="products">
+            <button>View All Products</button>
+        </form>
+    </div>
+
+    <!-- <div class="container">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -104,32 +200,13 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+    </div> -->
     
-    <p>
-        Lorem ipsum dolor sit amet, consectetur
-        adipisicing elit. Sequi maxime ipsa assumenda
-        nam, ea beatae nemo dolorum blanditiis
-        inventore neque alias, praesentium eum,
-        dicta dolor autem reiciendis explicabo
-        temporibus consectetur.
-    </p>
-
-    <div class="subheading">
-    Today's
-    </div>
-
-    <div class="flash-sales">
-    <h2>Flash Sales</h2>
-    Days Hours Minutes Seconds
-
-    </div>
-
-    <h2>Browse By Categories</h2>
-
-    <h2>Best Selling Products</h2>
-    </div>
-
-</body>
+    </main>
+    <footer>
+        <p>Author: Michelle Lim</p>
+        <p><a href="mailto:hello@michlim.com">hello@michlim.com</a></p>
+      </footer>
+    </body>
 <script src="index.js"></script>
 </html>
