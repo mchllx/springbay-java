@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spring - Cart</title>
+    <title>Spring - Search</title>
     <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
-    <style>
-    </style>
 </head>
 <body>
     <header>
@@ -34,6 +32,13 @@
         </nav>
     </header>
     <main class="grid">
+        <div class="search-results">
+            <p>Total search results:
+            <span th:text="'(' + *{searchResult.size()} + ')'"></span></p>
+            </div>
+            <!-- http://localhost:8081/api/search/phone -->
+            <a style="grid-column: span 2" th:href="'http://springbay.up.railway.app/api/search/' + ${word}" class="button">View JSON</a>
+ 
         <div class="container">
             <th:block th:if="${searchResult == null or searchResult.size() == 0}">
                 <p>No search results matched</p>
@@ -50,10 +55,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:if="${session.user == null}">
-                    <td style="grid-column:span 12">You are not logged in</td>
-                </tr>
-                <tr data-th-each="product: ${product}" th:if="${session.user != null}">
+                <tr data-th-each="product: ${searchResult}">
                     <td><img th:src="${product.thumbnail}" alt="Product Thumbnail" width="50px"
                             style="max-height:200px; object-fit: cover; object-position:top;" /></td>
                     <td data-th-text="*{product.title}"></td>

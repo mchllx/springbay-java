@@ -5,9 +5,9 @@ import java.util.logging.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LoginSvc {
+public class LoginService {
 
-    private Logger logger = Logger.getLogger(LoginSvc.class.getName());
+    private Logger logger = Logger.getLogger(LoginService.class.getName());
 
     public boolean userExist(String username, String password) {
         

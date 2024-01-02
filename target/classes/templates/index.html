@@ -15,16 +15,21 @@
             <a href="/"><img src="../icons/spring-logo.svg" alt="logo"></a>
             </div>
             <div class="search">
-                <form action="search">
+                <form th:action="@{/search/{word}}" th:method="get">
                 <input type="search" placeholder="Enter product name" name="search">
                 <button type="submit" class="search-btn" value="Search"><img src="../icons/search.svg" alt="search"></button>
                 </form>
             </div>
 
             <div class="icon-container">
-                <a th:href="@{/login}" class="button">Login</a>
+                <td th:if="${session.user != null}">
+                    <a th:href="@{/logout}" class="button-logout">Logout</a>
+                </td>
+                <td th:if="${session.user == null}">
+                    <a th:href="@{/login}" class="button">Login</a>
+                </td>
                 <a th:href="@{/cart}"><img src="../icons/cart.svg" alt="cart" ></a>
-                <a th:href="@{'/user=' + ${id}}"><img src="../icons/user.svg" alt="user" ></a>
+                <a th:href="@{'/user/' + ${user.username}}"><img src="../icons/user.svg" alt="user" ></a>
             </div>
         </nav>
     </header>
@@ -160,46 +165,6 @@
             <button>View All Products</button>
         </form>
     </div>
-
-    <!-- <div class="container">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Discount</th>
-                    <th>Rating</th>
-                    <th>Stock</th>
-                    <th>Brand</th>
-                    <th>Category</th>
-                    <th>Thumbnail</th>
-                    <th>Images</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                
-                <tr data-th-each="product: ${product}">
-                    <td data-th-text="*{product.id}"></td>
-                    <td data-th-text="*{product.title}"></td>
-                    <td data-th-text="*{product.description}"></td>
-                    <td data-th-text="*{product.price}"></td>
-                    <td data-th-text="*{product.discountPercentage}"></td>
-                    <td data-th-text="*{product.rating}"></td>
-                    <td data-th-text="*{product.stock}"></td>
-                    <td data-th-text="*{product.brand}"></td>
-                    <td data-th-text="*{product.category}"></td>
-                    <td data-th-text="*{product.thumbnail}"></td>
-                    <td data-th-text="*{product.images}"></td>
-                    <td>
-                        <a th:href="@{/events/register}" class="btn btn-secondary">Register</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div> -->
     
     </main>
     <footer>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring - Logout </title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+    <style>
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo-container">
+            <a href="/"><img src="../icons/spring-logo.svg" alt="logo"></a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="grid">
+    <h2 style="grid-column: span 12">Logged out</h2>
+    <a th:href="@{/}" class="button" style="grid-column: span 2">Back to Home</a>
+    </main>
+</body>
+</html>

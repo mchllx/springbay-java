@@ -36,7 +36,7 @@ public class HomeController {
     private Logger logger = Logger.getLogger(HomeController.class.getName());
 
     @GetMapping
-    public String showHome(@ModelAttribute("products") Product product, Model model, HttpSession sess) {
+    public String showHome(@ModelAttribute("product") Product product, Model model, HttpSession sess) {
         User user = (User) sess.getAttribute("user");
         if (user == null) {
             user = new User();
@@ -74,13 +74,13 @@ public class HomeController {
     }
 
     @GetMapping(path={"/product"})
-    public String showProduct(@ModelAttribute("products") Product product, Form form, Model model, HttpSession sess) {
+    public String showProduct(@ModelAttribute("product") Product product, Form form, Model model, HttpSession sess) {
         return "product";
     }
 
     @GetMapping(path={"/product/{id}"})
     public String showProductId(@PathVariable("id") Integer id, HttpSession sess,
-    @ModelAttribute("products") Product product, Form form, Model model) {
+    @ModelAttribute("product") Product product, Form form, Model model) {
         List<Product> prodListDB = prodSvc.getAllProduct("products");
         prodSvc.saveProducts(prodListDB);
 
@@ -109,6 +109,7 @@ public class HomeController {
 
     @PostMapping("/cart")
     public String addCart(@RequestParam("id") Integer id, @Valid @ModelAttribute("form") Form form, BindingResult bindings, Model model, HttpSession sess) {
+        model.addAttribute("form", new Form());
 
         if (bindings.hasErrors()) {
             return "error";
@@ -121,5 +122,26 @@ public class HomeController {
         System.out.println(form.getQty());
         return "redirect:/product{id}";
     
+    }
+
+    @GetMapping("/search")
+    public String showAllSearch(Model model) {
+        String word = "";
+        List<Product> searchList = prodSvc.searchProduct(word);
+        // System.out.println("-----------Search List----------" + searchList);
+
+        model.addAttribute("searchResult", searchList);
+        model.addAttribute("word", word);
+        return "search";
+    }
+    
+    @GetMapping("/search/{word}")
+    public String showSearch(@RequestParam("search") String word, Model model) {
+        System.out.println("-------------Word:------------" + word);
+        List<Product> searchList = prodSvc.searchProduct(word);
+
+        model.addAttribute("searchResult", searchList);
+        model.addAttribute("word", word);
+        return "search";
     }
 }

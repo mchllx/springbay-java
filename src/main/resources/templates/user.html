@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spring - Error </title>
-    <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+    <title>Spring - Profile</title>
+<link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
     <style>
     </style>
 </head>
@@ -33,10 +33,10 @@
             </div>
         </nav>
     </header>
-
     <main class="grid">
-    <h2 style="grid-column: span 12">Invalid page</h2>
-    <a th:href="@{/}" class="button" style="grid-column: span 2">Back to Home</a>
+    <h4 style="grid-column: span 12" th:if="${session.user == null}">You are not logged in</h4>
+    <h4 style="grid-column: span 12" th:if="${session.user != null}">Name: <span th:text="*{user.username}"></span></h4>
+    <h4 style="grid-column: span 12" th:if="${session.user != null}">Payment Method: Credit/Debit</h4>
     </main>
 </body>
 </html>

@@ -11,19 +11,24 @@
     <header>
         <nav class="navbar">
             <div class="logo-container">
-                <a href="/"><img src="../icons/spring-logo.svg" alt="logo"></a>
+            <a href="/"><img src="../icons/spring-logo.svg" alt="logo"></a>
             </div>
             <div class="search">
-                <form action="search">
+                <form th:action="@{/search/{word}}" th:method="get">
                 <input type="search" placeholder="Enter product name" name="search">
                 <button type="submit" class="search-btn" value="Search"><img src="../icons/search.svg" alt="search"></button>
                 </form>
             </div>
 
             <div class="icon-container">
-                <a th:href="@{/login}" class="button">Login</a>
+                <td th:if="${session.user != null}">
+                    <a th:href="@{/logout}" class="button-logout">Logout</a>
+                </td>
+                <td th:if="${session.user == null}">
+                    <a th:href="@{/login}" class="button">Login</a>
+                </td>
                 <a th:href="@{/cart}"><img src="../icons/cart.svg" alt="cart" ></a>
-                <a th:href="@{'/user=' + ${id}}"><img src="../icons/user.svg" alt="user" ></a>
+                <a th:href="@{'/user/' + ${user.username}}"><img src="../icons/user.svg" alt="user" ></a>
             </div>
         </nav>
     </header>

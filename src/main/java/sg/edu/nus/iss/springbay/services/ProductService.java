@@ -40,6 +40,7 @@ public class ProductService {
     private ProductRepo prodRepo;
 
     private List<Product> prodList = null;
+    private List<Product> searchList = null;
     private List<String> catList = null;
     private List<String> menuList = null;
 
@@ -218,6 +219,113 @@ public class ProductService {
 
             return catList;
     }
+
+    public List<Product> searchProduct(String word) {
+        // optional when it may or may not return data (cache is empty vs not empty)
+        String payload;
+        JsonArray array;
+        System.out.println("------Word from Svc-----" + word);
+
+        // construct into a uri template 
+            String url = UriComponentsBuilder
+                .fromUriString("https://dummyjson.com/products/search?q=" + word)
+                .queryParam("search")
+                .toUriString();
+
+            System.out.println("-------Url-------" + url);
+            //retrieve a Resource object of json type from external API
+            //httpmethod, URI (values from "url"), type (data type)
+            RequestEntity<Void> req = RequestEntity
+                .get(url) .accept(MediaType.APPLICATION_JSON) .build();
+
+            RestTemplate template = new RestTemplate();
+            //json values are stored within the response body/payload
+            ResponseEntity<String> resp = null;
+
+            /**execute GET http method from "url" uri template
+             * write to "req" RequestEntity
+             * return body of type String "resp" ResponseEntity**/
+
+            try {
+
+            resp = template.exchange(req, String.class);
+
+            } catch (RestClientException e1) {
+                logger.info("Request Failed: Server Error Response");
+                e1.printStackTrace();
+                return new LinkedList<>();
+            }
+
+            //if no 500 server error, resp is not empty
+            //values from body
+            payload = resp.getBody();
+            // System.out.println(payload);
+
+            //create json structure same as API
+            //read the string
+            //write into jsonobject
+            searchList = new ArrayList<>();
+            JsonReader reader = Json.createReader(new StringReader(payload));
+            JsonObject obj = reader.readObject();
+            // System.out.println("Results:" + obj);
+
+            array = obj.getJsonArray("products"); 
+
+            System.out.println("--------------------Results from Search API:--------------------" + array);
+        
+            //convert from Json to Java POJO
+            // products [{..., [...]}]
+            searchList = array.stream()
+                .map(j -> j.asJsonObject())
+                // .peek(json -> System.out.println("--------------------Processing Json--------------------" + json))
+                .map(o -> {
+            // try {
+                Integer id = o.getInt("id", 0);
+                String title = o.getString("title", "Test");
+                String description = o.getString("description", "This is a test product");
+                Double price = (Double)(double)(o.getInt("price", 100));
+                Double discountPercentage = (Double)(double)(o.getInt("discountPercentage", 10));
+                // System.out.println("---------Raw discount----------" + discountPercentage);
+                double rating = (Double)(double)(o.getInt("rating", 5));
+                Integer stock = o.getInt("stock", 100);
+                String brand = o.getString("brand", "Springbay");
+                String category = o.getString("category", "No category");
+                String thumbnail = o.getString("thumbnail", "https://upload.wikimedia.org/wikipedia/commons/3/3f/Placeholder_view_vector.svg");
+
+                //["...", "...", "...", "..."]
+
+                JsonArray imgArray = o.getJsonArray("images");
+                int size = imgArray.size();
+                String[] imgUrl = new String[size];
+                StringBuilder str = new StringBuilder();
+                for (int i = 0; i < size; i++){
+                    imgUrl[i] = imgArray.getJsonString(i).getString();
+                        if (i == size-1) {
+                            str.append(imgUrl[i]);
+                        } else {
+                            str.append(imgUrl[i]);
+                            str.append("," + " ");
+                        }
+                }
+                str.insert(0, "[");
+                str.insert(str.length(), "]");
+                String images = str.toString(); 
+                // System.out.println("--------------------Images--------------------" + images); 
+
+                return new Product(id, title, description, price, discountPercentage,
+                rating, stock, brand, category, thumbnail, images);
+
+                // } catch (Exception e2) {
+                //     logger.info("Processing Failed: Error processing Product JSON");
+                //     e2.printStackTrace();
+                //     return new Product();
+                // }
+            })
+
+            .toList();
+            // System.out.println("--------------------Results from Stream:--------------------" + prodList);
+            return searchList;
+        } 
 
     public List<Product> getProduct(String key) {
         List<Product> prodList = prodRepo.getProduct(key);
