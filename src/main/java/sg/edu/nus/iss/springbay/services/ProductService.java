@@ -228,8 +228,9 @@ public class ProductService {
 
         // construct into a uri template 
             String url = UriComponentsBuilder
-                .fromUriString("https://dummyjson.com/products/search?q=" + word)
-                .queryParam("search")
+            // https://dummyjson.com/products/search?q=
+                .fromUriString("https://dummyjson.com/products/search?")
+                .queryParam("q", word)
                 .toUriString();
 
             System.out.println("-------Url-------" + url);

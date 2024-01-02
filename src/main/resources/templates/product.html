@@ -28,7 +28,7 @@
                     <a th:href="@{/login}" class="button">Login</a>
                 </td>
                 <a th:href="@{/cart}"><img src="../icons/cart.svg" alt="cart" ></a>
-                <a th:href="@{'/user/' + ${user.username}}"><img src="../icons/user.svg" alt="user" ></a>
+                <a th:href="@{'/user/' + ${session.user?.username}}"><img src="../icons/user.svg" alt="user" ></a>
             </div>
         </nav>
     </header>
@@ -85,16 +85,16 @@
                 <div class="divider"> 
                 </div>
 
-                <form method="POST" data-th-object="${form}">
+                <form method="POST" th:action="@{/cart}" th:object="${form}">
                     <td>
                     <!-- Text Input -->
                     <p><label for="quantity">Qty:</label>
-                    <input type="number" id="qty" name="qty" value="1" data-th-field="*{qty}" required/>
-                    <span data-th-if="${#fields.hasErrors('qty')}" data-th-errors="*{qty}">
+                    <input type="number" id="qty" name="qty" value="1" th:field="*{qty}" required/>
+                    <span th:if="${#fields.hasErrors('qty')}" th:errors="*{qty}">
                     </span></p></td>
                     <br>
                     <!-- <input type="hidden" name="id" value="${user.username}"> -->
-                    <button type="submit" formaction="/cart">Add to Cart</button>
+                    <button type="submit" >Add to Cart</button>
                 </form>
                 </td>
             </tr>

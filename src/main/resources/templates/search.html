@@ -27,7 +27,7 @@
                     <a th:href="@{/login}" class="button">Login</a>
                 </td>
                 <a th:href="@{/cart}"><img src="../icons/cart.svg" alt="cart" ></a>
-                <a th:href="@{'/user/' + ${user.username}}"><img src="../icons/user.svg" alt="user" ></a>
+                <a th:href="@{'/user/' + ${session.user?.username}}"><img src="../icons/user.svg" alt="user" ></a>
             </div>
         </nav>
     </header>
@@ -45,7 +45,7 @@
             </th:block>
     
         <table class="table table-striped" th:if="${searchResult != null and searchResult.size() > 0}">
-            <thead>
+            <thead style="text-align: left;">
                 <tr>
                     <th>Image</th>
                     <th>Title</th>

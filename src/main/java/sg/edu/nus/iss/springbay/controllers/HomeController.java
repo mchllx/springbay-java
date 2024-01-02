@@ -96,6 +96,7 @@ public class HomeController {
         model.addAttribute("form", new Form());
         model.addAttribute("id", id);
         sess.setAttribute("id", id);
+        sess.setAttribute("product", indexProd);
         model.addAttribute("product", indexProd);
         model.addAttribute("category", catList);
 
@@ -105,23 +106,6 @@ public class HomeController {
         }
     
         return "product";
-    }
-
-    @PostMapping("/cart")
-    public String addCart(@RequestParam("id") Integer id, @Valid @ModelAttribute("form") Form form, BindingResult bindings, Model model, HttpSession sess) {
-        model.addAttribute("form", new Form());
-
-        if (bindings.hasErrors()) {
-            return "error";
-        }
-
-        if (form.getQty() < 0) {
-            return "error";
-        }
-        // System.out.println("id"+ id);
-        System.out.println(form.getQty());
-        return "redirect:/product{id}";
-    
     }
 
     @GetMapping("/search")

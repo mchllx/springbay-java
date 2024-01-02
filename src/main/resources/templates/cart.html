@@ -29,24 +29,23 @@
                     <a th:href="@{/login}" class="button">Login</a>
                 </td>
                 <a th:href="@{/cart}"><img src="../icons/cart.svg" alt="cart" ></a>
-                <a th:href="@{'/user/' + ${user.username}}"><img src="../icons/user.svg" alt="user" ></a>
+                <a th:href="@{'/user/' + ${session.user?.username}}"><img src="../icons/user.svg" alt="user" ></a>
             </div>
         </nav>
     </header>
     <main class="grid">
-        <div class="container">
-            <th:block th:if="${searchResult == null or searchResult.size() == 0}">
-                <p>No search results matched</p>
+        <div class="container" style="display:grid; justify-content:stretch;">
+            <th:block th:if="${product == null}">
+                <p>No products in cart</p>
             </th:block>
     
-        <table class="table table-striped" th:if="${searchResult != null and searchResult.size() > 0}">
-            <thead>
+        <table th:if="${product != null}">
+            <thead style="text-align: left;">
                 <tr>
                     <th>Image</th>
                     <th>Title</th>
-                    <th>Description</th>
                     <th>Price</th>
-                    <th>Rating</th>
+                    <th>Qty</th>
                 </tr>
             </thead>
             <tbody>
@@ -57,9 +56,8 @@
                     <td><img th:src="${product.thumbnail}" alt="Product Thumbnail" width="50px"
                             style="max-height:200px; object-fit: cover; object-position:top;" /></td>
                     <td data-th-text="*{product.title}"></td>
-                    <td data-th-text="*{product.description}"></td>
                     <td data-th-text="'$' + ${#numbers.formatDecimal(product.price * (1 - product.discountPercentage / 100), 1, 'COMMA', 2, 'POINT')}"></td>
-                    <td data-th-text="*{product.rating}"></td>
+                    <td data-th-text="${session.qty}"></td>
                     <td>
                         <a th:href="@{'/product/' + *{product.id}}" class="button">View</a>
                     </td>
