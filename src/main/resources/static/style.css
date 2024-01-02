@@ -195,13 +195,14 @@ a{
     background-color: rgb(245, 245, 245);
     display: flex;
     padding: 2px;
+    margin-right: 1rem;
     border: none;
     border-radius: 5px;
   }
 
   .search {
     max-width: 15rem;
-    grid-column: 10 / span 2;
+    grid-column: 9 / span 2;
 
   }
 
@@ -240,12 +241,16 @@ a{
   .icon-container {
     display: flex;
     grid-column: span 1;
-    justify-self: flex-end;
+    justify-self: flex-start;
   }
 
   .icon-container img {
     max-width: 2rem;
     margin-left: 0.75rem;
+  }
+  
+  .container {
+    grid-column: span 12;
   }
 
   main {
@@ -305,6 +310,57 @@ a{
     object-fit:cover;
   }
 
+  main .product-image {
+    grid-column: span 1;
+    max-height: 480px;
+  }
+
+  main .product-thumbnail {
+    display: grid;
+    grid-column: span 5;
+  }
+
+  main .thumbnail {
+    width: 100%;
+    max-height: 480px;
+    object-fit:cover;
+    object-position: top;
+  }
+
+  main .product-detail { 
+    display: grid;
+    grid-column: span 6;
+  }
+
+  main .divider { 
+    border-bottom: 1px solid rgb(223, 223, 223);
+    margin: 1rem 0rem 1rem;
+  }
+
+  main .product-detail p {
+    margin: 1rem 0rem 1rem;
+  }
+
+  main .login {
+    grid-column: span 12;
+  }
+
+  input[type="number"] {
+    width: 60px; /* Adjust the width as needed */
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+  }
+
+/* Style for the error message span */
+span.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block; /* Display on a new line */
+}
+
   /* The circles or bullets indicators */
   main .dots-container {
     display: flex;
@@ -348,7 +404,6 @@ a{
     display: flex;
     grid-column: span 3;
     justify-content: space-between;
-    margin-top: -2rem;
   }
 
   main .flash-sales div{
@@ -363,7 +418,6 @@ a{
     line-height: 1.58;
     letter-spacing: -.003em;
     font-size: 0.75rem;
-    margin-bottom: -0.25rem;
   }
 
   main .flash-sales-timer h2 {
@@ -374,7 +428,6 @@ a{
     line-height: 1.58;
     letter-spacing: -.003em;
     font-size: 1.55rem;
-    margin-top: 0.5rem;
   }
 
   main .product-list{
@@ -406,6 +459,16 @@ a{
     background-color: rgb(220, 70, 70);
     color: rgb(255, 255, 255);
     padding: 1rem 3rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .button {
+    background-color: rgb(220, 70, 70);
+    color: rgb(255, 255, 255);
+    padding: 8px 1rem;
+    font-size: 12px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -548,6 +611,36 @@ a{
   .nav-menu a:hover{
     text-decoration: underline;
     text-decoration-color: rgb(192, 192, 192);
+  }
+
+  ul.breadcrumb {
+    grid-column: span 12;
+    list-style: none;
+    background-color: transparent;
+  }
+  
+  /* Display list items side by side */
+  ul.breadcrumb li {
+    display: inline;
+  }
+  
+  /* Add a slash symbol (/) before/behind each list item */
+  ul.breadcrumb li+li:before {
+    padding: 8px;
+    color: rgb(192, 192, 192);
+    content: "/\00a0";
+  }
+  
+  /* Add a color to all links inside the list */
+  ul.breadcrumb li a {
+    color: rgb(53,53,53);
+    text-decoration: none;
+  }
+  
+  /* Add a color on mouse-over */
+  ul.breadcrumb li a:hover {
+    color: rgb(53,53,53);
+    text-decoration: underline;
   }
 
   footer {

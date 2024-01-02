@@ -1,7 +1,5 @@
 package sg.edu.nus.iss.springbay.models;
 
-import java.util.List;
-
 public class Product {
 
     private Integer id;

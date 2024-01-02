@@ -8,12 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import sg.edu.nus.iss.springbay.Utils;
+import sg.edu.nus.iss.springbay.models.Form;
 import sg.edu.nus.iss.springbay.models.Product;
+import sg.edu.nus.iss.springbay.models.User;
 import sg.edu.nus.iss.springbay.repositories.ProductRepo;
 import sg.edu.nus.iss.springbay.services.ProductService;
 
@@ -27,31 +36,90 @@ public class HomeController {
     private Logger logger = Logger.getLogger(HomeController.class.getName());
 
     @GetMapping
-    public ModelAndView showHome(@ModelAttribute("products") Product product) {
-
-        ModelAndView mav = new ModelAndView();
-
-        List<Product> prodList = prodSvc.getAllProduct("products");
-        List<String> catList = prodSvc.getAllCategory("category");
-        List<String> menuList = prodSvc.getMenu();
-        System.out.println("---------Controller Category---------" + catList);
-        
-        logger.info("Success: Products found" + prodList);
-        mav.addObject("product", prodList);
-        mav.addObject("category", catList);
-        mav.addObject("menu", menuList);
-
-        //if model does not contain object
-        if (mav.equals(null)) {
-            logger.info("Error: Product not found");
-            mav.setStatus(HttpStatusCode.valueOf(500));
-            mav.setViewName("error");
-            return mav;
+    public String showHome(@ModelAttribute("products") Product product, Model model, HttpSession sess) {
+        User user = (User) sess.getAttribute("user");
+        if (user == null) {
+            user = new User();
         }
 
-        mav.setStatus(HttpStatusCode.valueOf(200));
-        mav.setViewName("index");
-        return mav;
+        List<Product> prodListDB = prodSvc.getAllProduct("products");
+        prodSvc.saveProducts(prodListDB);
+
+        List<Product> prodList = prodSvc.getProduct("products");
+        prodSvc.saveProducts(prodList);
+        List<String> catList = prodSvc.getAllCategory("category");
+        List<String> menuList = prodSvc.getMenu();
+        
+        if (prodList.isEmpty()) {
+            logger.info("Error: ProductList is empty or returns null");
+
+        } else {
+            logger.info("Success: Products found" + prodList);
+            logger.info("Success: Categories found" + catList);
+
+            prodSvc.saveCategories(catList);
+            model.addAttribute("user", user);
+            model.addAttribute("product", prodList);
+            model.addAttribute("category", catList);
+            model.addAttribute("menu", menuList);
+        }
+
+        //if model does not contain object
+        if (model.equals(null)) {
+            logger.info("Error: Product not found");
+            return "error";
+        } else {
+        return "index";
+        }
     }
+
+    @GetMapping(path={"/product"})
+    public String showProduct(@ModelAttribute("products") Product product, Form form, Model model, HttpSession sess) {
+        return "product";
+    }
+
+    @GetMapping(path={"/product/{id}"})
+    public String showProductId(@PathVariable("id") Integer id, HttpSession sess,
+    @ModelAttribute("products") Product product, Form form, Model model) {
+        List<Product> prodListDB = prodSvc.getAllProduct("products");
+        prodSvc.saveProducts(prodListDB);
+
+        List<Product> prodList = prodSvc.getProduct("products");
+        prodSvc.saveProducts(prodList);
+        System.out.println(id);
+        Long index = (id.longValue() -1);
+
+        // System.out.println("--------ProductController-------" + prodList);
+        List<String> catList = prodSvc.getAllCategory("category");
+        List<Product> indexProd = prodSvc.get("products", index);
+        // System.out.println("----------Product at Index-------" + indexProd);
+        model.addAttribute("form", new Form());
+        model.addAttribute("id", id);
+        sess.setAttribute("id", id);
+        model.addAttribute("product", indexProd);
+        model.addAttribute("category", catList);
+
+        if (model.equals(null)) {
+            logger.info("Error: Product not found");
+            return "error";
+        }
     
+        return "product";
+    }
+
+    @PostMapping("/cart")
+    public String addCart(@RequestParam("id") Integer id, @Valid @ModelAttribute("form") Form form, BindingResult bindings, Model model, HttpSession sess) {
+
+        if (bindings.hasErrors()) {
+            return "error";
+        }
+
+        if (form.getQty() < 0) {
+            return "error";
+        }
+        // System.out.println("id"+ id);
+        System.out.println(form.getQty());
+        return "redirect:/product{id}";
+    
+    }
 }

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Springbay - Home</title>
-    <link href="style.css" rel="stylesheet">
+    <title>Spring - Home</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
     <style>
     </style>
 </head>
@@ -22,8 +22,9 @@
             </div>
 
             <div class="icon-container">
-            <a th:href="cart"><img src="../icons/cart.svg" alt="cart" ></a>
-            <a th:href="@{'/cat=' + ${menu}}"><img src="../icons/user.svg" alt="user" ></a>
+                <a th:href="@{/login}" class="button">Login</a>
+                <a th:href="@{/cart}"><img src="../icons/cart.svg" alt="cart" ></a>
+                <a th:href="@{'/user=' + ${id}}"><img src="../icons/user.svg" alt="user" ></a>
             </div>
         </nav>
     </header>
@@ -90,19 +91,17 @@
         </div>
     </div>
     <div class="section-button">
-        left right
+        <div class="button-container">
+            <form th:action="@{/product}">
+                <button>View All</button>
+            </form>   
+    </div>
     </div>
     <div class="product-list">
         <tr th:each="product, iterStat : ${product}" th:if="${iterStat.index lt 4}">
-            <td><a th:href="@{'/product=' + *{product.title}}">
-            <img class="cropped-img" th:src="${#strings.listSplit(#strings.replace(#strings.replace(product.images, '[', ''), ']', ''), ',')[0]}"
-                th:text="*{product.title}"></a></td>
+            <td><a th:href="@{/product/{id}(id=${product.id})}">
+                <img class="cropped-img" th:src="${#strings.listSplit(#strings.replace(#strings.replace(product.images, '[', ''), ']', ''), ',')[0]}"></a></td>
         </tr>
-    </div>
-    <div class="button-container">
-    <form action="products">
-        <button>View All Products</button>
-    </form>
     </div>
 
     <div class="subheading">
@@ -127,7 +126,7 @@
         <h2>Best Selling Products</h2>
     </div>
     <div class="section-button">
-        <form action="products">
+        <form th:action="@{/product}">
             <button>View All</button>
         </form>
         <!-- ratings sort by highest -->
@@ -135,9 +134,9 @@
 
     <div class="product-list">
         <tr th:each="product, iterStat : ${product}" th:if="${iterStat.index lt 4}">
-            <td><a th:href="@{'/product=' + *{product.title}}">
+            <td><a th:href="@{/product/{id}(id=${product.id})}">
             <img class="cropped-img" th:src="${#strings.listSplit(#strings.replace(#strings.replace(product.images, '[', ''), ']', ''), ',')[0]}"
-                th:text="*{product.title}"></a></td>
+                ></a></td>
         </tr>
     </div>
 
@@ -150,14 +149,14 @@
      
     <div class="product-list">
         <tr th:each="product, iterStat : ${product}" th:if="${iterStat.index lt 8}">
-            <td><a th:href="@{'/product=' + *{product.title}}">
+            <td><a th:href="@{/product/{id}(id=${product.id})}">
             <img class="cropped-img" th:src="${#strings.listSplit(#strings.replace(#strings.replace(product.images, '[', ''), ']', ''), ',')[0]}"
-                th:text="*{product.title}"></a></td>
+                ></a></td>
         </tr>
     </div>
 
     <div class="button-container">
-        <form action="products">
+        <form th:action="@{/product}">
             <button>View All Products</button>
         </form>
     </div>

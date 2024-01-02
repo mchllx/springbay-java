@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring - Product</title>
+    <!-- Dynamic Title with product title -->
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo-container">
+                <a href="/"><img src="../icons/spring-logo.svg" alt="logo"></a>
+            </div>
+            <div class="search">
+                <form action="search">
+                <input type="search" placeholder="Enter product name" name="search">
+                <button type="submit" class="search-btn" value="Search"><img src="../icons/search.svg" alt="search"></button>
+                </form>
+            </div>
+
+            <div class="icon-container">
+                <a th:href="@{/login}" class="button">Login</a>
+                <a th:href="@{/cart}"><img src="../icons/cart.svg" alt="cart" ></a>
+                <a th:href="@{'/user=' + ${id}}"><img src="../icons/user.svg" alt="user" ></a>
+            </div>
+        </nav>
+    </header>
+    <main class="grid">
+
+        <ul class="breadcrumb">
+            <li><a th:href="@{'/'}">Home</a></li>
+            <tr data-th-each="product: ${product}">
+            <td>
+                <li><a th:href="@{/category/{category}(category=${product.category})}" th:text="*{product.category}">Category</a></li>
+            
+            <li><a th:href="@{/product/{id}(id=${product.id})}" th:text="*{product.title}">Title</a></li>
+            </td>
+        </tr>
+        </ul>
+        <div class="product-image">
+            <table>
+                <tr th:each="product: ${product}">
+                    <td>
+                        <div th:each="image: ${#strings.listSplit(#strings.replace(#strings.replace(product.images, '[', ''), ']', ''), ',')}">
+                            <img class="cropped-img" th:src="${image}" alt="Product Image">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="product-thumbnail">
+            <tr th:each="product: ${product}">
+                <td>
+                    <img class="thumbnail" th:src="${#strings.listSplit(#strings.replace(#strings.replace(product.thumbnail, '[', ''), ']', ''), ',')[0]}">
+                </td>
+            </tr>
+        </div> 
+
+        <div class="product-detail">
+            <tr th:each="product: ${product}">
+                <p>Brand:
+                <td th:text="*{product.brand}"></td></p>
+                <td>
+                <h2><td th:text="*{product.title}"></td></h2>
+                <p>Rating:
+                <td th:text="*{product.rating}"></td>
+                / 5.0</p>
+
+                <h3>
+                    <td th:text="'$' + ${#numbers.formatDecimal(product.price * (1 - product.discountPercentage / 100), 1, 'COMMA', 2, 'POINT')}"></td>
+                    <p>(Savings
+                        <span th:text="'$' + ${#numbers.formatDecimal(product.price - (product.price * (1 - product.discountPercentage / 100)), 1, 'COMMA', 2, 'POINT')} + ')'"></span>
+                    </p>
+                </h3>
+
+                <td th:text="*{product.description}"></td>
+                <div class="divider"> 
+                </div>
+
+                <form method="POST" data-th-object="${form}">
+                    <td>
+                    <!-- Text Input -->
+                    <p><label for="quantity">Qty:</label>
+                    <input type="number" id="qty" name="qty" value="1" data-th-field="*{qty}" required/>
+                    <span data-th-if="${#fields.hasErrors('qty')}" data-th-errors="*{qty}">
+                    </span></p></td>
+                    <br>
+                    <!-- <input type="hidden" name="id" value="${user.username}"> -->
+                    <button type="submit" formaction="/cart">Add to Cart</button>
+                </form>
+                </td>
+            </tr>
+        </div>
+        
+    </main>
+<footer>
+    <p>Author: Michelle Lim</p>
+    <p><a href="mailto:hello@michlim.com">hello@michlim.com</a></p>
+  </footer>
+</body>
+<script src="index.js"></script>
+</html>

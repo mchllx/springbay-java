@@ -51,13 +51,12 @@ public class ProductService {
     public List<Product> getAllProduct(String key) {
         
         // optional when it may or may not return data (cache is empty vs not empty)
-        List<String> list = prodRepo.getAll(key);
+        List<Product> list = prodRepo.getProduct(key);
         // System.out.println("--------------------Product from Redis:--------------------" + list);
         String payload;
         JsonArray array;
 
         // construct into a uri template 
-        // if (list.isEmpty()) {
             String url = UriComponentsBuilder
                 .fromUriString("https://dummyjson.com/products")
                 .queryParam("products")
@@ -107,15 +106,16 @@ public class ProductService {
             // products [{..., [...]}]
             prodList = array.stream()
                 .map(j -> j.asJsonObject())
-                // .peek(json -> System.out.println("--------------------Processing--------------------" + json))
+                // .peek(json -> System.out.println("--------------------Processing Json--------------------" + json))
                 .map(o -> {
-            try {
+            // try {
                 Integer id = o.getInt("id", 0);
                 String title = o.getString("title", "Test");
                 String description = o.getString("description", "This is a test product");
-                Double price = Double.parseDouble(o.getString("price", "100.0"));
-                Double discountPercentage = Double.parseDouble(o.getString("discountPercentage", "10.00"));
-                Double rating = Double.parseDouble(o.getString("rating", "5.00"));
+                Double price = (Double)(double)(o.getInt("price", 100));
+                Double discountPercentage = (Double)(double)(o.getInt("discountPercentage", 10));
+                // System.out.println("---------Raw discount----------" + discountPercentage);
+                double rating = (Double)(double)(o.getInt("rating", 5));
                 Integer stock = o.getInt("stock", 100);
                 String brand = o.getString("brand", "Springbay");
                 String category = o.getString("category", "No category");
@@ -144,18 +144,17 @@ public class ProductService {
                 return new Product(id, title, description, price, discountPercentage,
                 rating, stock, brand, category, thumbnail, images);
 
-                } catch (Exception e2) {
-                    logger.info("Processing Failed: Error processing Product JSON");
-                    e2.printStackTrace();
-                    return new Product();
-                }
+                // } catch (Exception e2) {
+                //     logger.info("Processing Failed: Error processing Product JSON");
+                //     e2.printStackTrace();
+                //     return new Product();
+                // }
             })
 
             .toList();
             // System.out.println("--------------------Results from Stream:--------------------" + prodList);
-
             return prodList;
-    }
+        } 
 
     public List<String> getAllCategory(String key) {
         List<String> list = prodRepo.getAll(key);
@@ -220,8 +219,13 @@ public class ProductService {
             return catList;
     }
 
-    public void get(String key, int index) {
-        prodRepo.get(key, index);
+    public List<Product> getProduct(String key) {
+        List<Product> prodList = prodRepo.getProduct(key);
+        return prodList;
+    }
+
+    public List<Product> get(String key, long index) {
+        return prodRepo.get(key, index);
     }
 
     public void saveProducts(List<Product> prodList) {
@@ -250,6 +254,7 @@ public class ProductService {
 
         return menuList;
     }
+
 
          // [Smartphones, Laptops, Fragrances, Skincare, Groceries, Home-decoration, Furniture, Tops, Womens-dresses, Womens-shoes, Mens-shirts, Mens-shoes, Mens-watches, Womens-watches, Womens-bags, Womens-jewellery, Sunglasses, Automotive, Motorcycle, Lighting]
 
@@ -291,39 +296,33 @@ public class ProductService {
 
 }
 
- // } else {
-        //     //convert from String to Json
-        //     payload = list.toString();
-        //     JsonReader reader = Json.createReader(new StringReader(payload));
+// JsonReader reader = Json.createReader(new StringReader(payload));
+//             JsonObject obj = reader.readObject();
 
-        //     JsonBuilderFactory fac = Json.createBuilderFactory(null);
-        //     JsonObject results = Json.createObjectBuilder()
-        //         .add("products", fac.createArrayBuilder()
-        //             .add(fac.createObjectBuilder()
-        //             .add("id", 0)
-        //             .add("title", "Test")
-        //             .add("description", "This is a test product")
-        //             .add("price", 100.0)
-        //             .add("discountPercentage", 10.00)
-        //             .add("rating", 5.00)
-        //             .add("stock", 100)
-        //             .add("brand", "Springbay")
-        //             .add("category", "test")
-        //             .add("thumbnail", "https://upload.wikimedia.org/wikipedia/commons/3/3f/Placeholder_view_vector.svg")
-        //             .add("images", fac.createArrayBuilder()
-        //                 .add("https://upload.wikimedia.org/wikipedia/commons/3/3f/Placeholder_view_vector.svg")
-        //                 .add("https://upload.wikimedia.org/wikipedia/commons/3/3f/Placeholder_view_vector.svg")
-        //                 .add("https://upload.wikimedia.org/wikipedia/commons/3/3f/Placeholder_view_vector.svg")
-        //                 .add("https://upload.wikimedia.org/wikipedia/commons/3/3f/Placeholder_view_vector.svg")
-        //             )))
-        //         .add("total", 100)
-        //         .add("skip", 0)
-        //         .add("limit", 30)
-        //         .build();
-        //     System.out.println("--------------------Payload from Cache:--------------------" + payload);
-
-        // }
-        // return prodList; 
+//             JsonBuilderFactory fac = Json.createBuilderFactory(null);
+//             JsonObject results = Json.createObjectBuilder(obj)
+//                 .add("products", fac.createArrayBuilder()
+//                     .add(fac.createObjectBuilder()
+//                     .add("id", 0)
+//                     .add("title", "Test")
+//                     .add("description", "This is a test product")
+//                     .add("price", 100.0)
+//                     .add("discountPercentage", 10.00)
+//                     .add("rating", 5.00)
+//                     .add("stock", 100)
+//                     .add("brand", "Springbay")
+//                     .add("category", "test")
+//                     .add("thumbnail", "https://upload.wikimedia.org/wikipedia/commons/3/3f/Placeholder_view_vector.svg")
+//                     .add("images", fac.createArrayBuilder()
+//                         .add("https://upload.wikimedia.org/wikipedia/commons/3/3f/Placeholder_view_vector.svg")
+//                         .add("https://upload.wikimedia.org/wikipedia/commons/3/3f/Placeholder_view_vector.svg")
+//                         .add("https://upload.wikimedia.org/wikipedia/commons/3/3f/Placeholder_view_vector.svg")
+//                         .add("https://upload.wikimedia.org/wikipedia/commons/3/3f/Placeholder_view_vector.svg")
+//                     )))
+//                 .add("total", 100)
+//                 .add("skip", 0)
+//                 .add("limit", 30)
+//                 .build();
 
 //pass null as config
             //unless WriterFactory, takes in a Map<String, ?/Object>

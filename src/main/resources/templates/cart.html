@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring - Cart</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+    <style>
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo-container">
+            <a href="/"><img src="../icons/spring-logo.svg" alt="logo"></a>
+            </div>
+            <div class="search">
+                <form action="search">
+                <input type="search" placeholder="Enter product name" name="search">
+                <button type="submit" class="search-btn" value="Search"><img src="../icons/search.svg" alt="search"></button>
+                </form>
+            </div>
+
+            <div class="icon-container">
+                <a th:href="@{/login}" class="button">Login</a>
+                <a th:href="@{/cart}"><img src="../icons/cart.svg" alt="cart" ></a>
+                <a th:href="@{'/user=' + ${id}}"><img src="../icons/user.svg" alt="user" ></a>
+            </div>
+        </nav>
+    </header>
+
+  hello 
+    
+</body>
+</html>

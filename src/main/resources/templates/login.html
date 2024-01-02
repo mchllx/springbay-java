@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring - Login</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo-container">
+            <a href="/"><img src="../icons/spring-logo.svg" alt="logo"></a>
+            </div>
+        </nav>
+    </header>
+    <main class="grid">
+        <h2>Login</h2>
+
+        <div class="login">
+        <form method="POST" th:action="@{/login}" th:object="${user}">
+			<input type="hidden" name="userId" th:value="${userId}">
+			<table>
+				<tr>
+					<h4><td>Username:</td></h4>
+					<td>
+						<input type="text" name="username" size="30"
+							th:field="*{username}">
+						<span th:if="${#fields.hasErrors('username')}"
+								th:errors="*{username}">
+						</span>
+					</td>
+				</tr>
+				<tr>
+					<h4><td>Password:</td></h4>
+					<td>
+						<input type="password" name="password" min="1" size="30" value="1"
+							th:field="*{password}">
+						<span th:if="${#fields.hasErrors('password')}"
+								th:errors="*{password}"></span>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<button type="submit"> Login </button>
+					</td>
+				</tr>
+			</table>
+		</form>
+        </div>
+
+    </main>
+<footer>
+    <p>Author: Michelle Lim</p>
+    <p><a href="mailto:hello@michlim.com">hello@michlim.com</a></p>
+    </footer>
+</body>
+<script src="index.js"></script>
+</html>
